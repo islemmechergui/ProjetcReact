@@ -21,7 +21,7 @@ export default function TaskForm({ onSave, onCancel }) {
         required
       />
       <button type="submit" className="btn-add">Ajouter</button>
-      <button type="button" className="btn-cancel" onClick={onCancel}>Annuler</button>
+      <button type="button" className="btn-cancel" onClick={onCancel}>annuler</button>
     </form>
   );
 }
