@@ -3,7 +3,8 @@ import React, { useState } from "react";
 export default function TaskItem({ task, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
-
+  const [showToast, setShowToast] = useState(false);  
+  
   const handleSave = () => {
     onUpdate(editedTask);
     setIsEditing(false);
@@ -16,10 +17,31 @@ export default function TaskItem({ task, onUpdate, onDelete }) {
 
   const handleToggleComplete = () => {
     
-    onUpdate({ ...task, completed: true });
+    onUpdate({ ...task, completed: !task.completed  });
+  };
+ 
+  const handleDelete = () => {
+    const confirmed = window.confirm("Voulez-vous vraiment supprimer cette tâche ?");
+    if (confirmed) {
+      setShowToast(true);
+  
+      
+      setTimeout(() => {
+        onDelete(task.id);
+      }, 3000);
+    }
   };
 
   return (
+    <>
+      {showToast && (
+  <div style={toastStyle}>
+    Tache supprimee avec succes  (dans 3 secondes)
+  </div>
+)}
+
+
+
     <div className="d-flex justify-content-between align-items-center border rounded p-2 mb-2 bg-light w-100">
       {isEditing ? (
         <input
@@ -53,14 +75,28 @@ export default function TaskItem({ task, onUpdate, onDelete }) {
                 Compléter
               </button>
             )}
-
-            <button className="btn btn-danger btn-sm" onClick={() => onDelete(task.id)}>
-              Supprimer
-            </button>
-          </>
-        )}
+   <button className="btn btn-danger btn-sm" onClick={handleDelete}>
+                Supprimer
+              </button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+
+const toastStyle = {
+  position: "fixed",
+  top: "20px",
+  right: "20px",
+  backgroundColor: "#28a745",
+  color: "#fff",
+  padding: "12px 20px",
+  borderRadius: "8px",
+  boxShadow: "0px 2px 10px rgba(0,0,0,0.2)",
+  zIndex: 1000,
+  animation: "fadeInOut 3s ease-in-out"
+};
+
 
